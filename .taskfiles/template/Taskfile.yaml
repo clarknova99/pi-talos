@@ -80,13 +80,13 @@ tasks:
 
   render-configs:
     internal: true
-    cmd: makejinja
+    cmd: mise x -- makejinja
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     preconditions:
       - test -f {{.TEMPLATE_DIR}}/scripts/plugin.py
       - test -f {{.MAKEJINJA_CONFIG_FILE}}
-      - which makejinja
+      - mise which makejinja
 
   encrypt-secrets:
     internal: true
@@ -114,10 +114,10 @@ tasks:
   validate-talos-config:
     internal: true
     dir: '{{.TALOS_DIR}}'
-    cmd: talhelper validate talconfig {{.TALOS_DIR}}/talconfig.yaml
+    cmd: mise x -- talhelper validate talconfig {{.TALOS_DIR}}/talconfig.yaml
     preconditions:
       - test -f {{.TALOS_DIR}}/talconfig.yaml
-      - which talhelper
+      - mise which talhelper
 
   debug:
     desc: Gather common resources in your cluster
