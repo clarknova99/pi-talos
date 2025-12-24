@@ -1,0 +1,67 @@
+---
+version: '3'
+
+tasks:
+
+  talos:
+    desc: Bootstrap the Talos cluster
+    dir: '{{.TALOS_DIR}}'
+    vars:
+      BOOTSTRAP_IPS: '{{.BOOTSTRAP_IPS | default ""}}'
+      BOOTSTRAP_NODE_IPS: '{{.BOOTSTRAP_NODE_IPS | default ""}}'
+    cmds:
+      - '[ -f talsecret.sops.yaml ] || mise x -- talhelper gensecret | SOPS_AGE_KEY_FILE={{.SOPS_AGE_KEY_FILE}} mise x -- sops --filename-override talos/talsecret.sops.yaml --encrypt /dev/stdin > talsecret.sops.yaml'
+      - SOPS_AGE_KEY_FILE={{.SOPS_AGE_KEY_FILE}} mise x -- talhelper genconfig
+      - |
+          if [ -n "{{.BOOTSTRAP_NODE_IPS}}" ]; then
+            for pair in {{.BOOTSTRAP_NODE_IPS}}; do
+              node="${pair%%=*}"
+              ip="${pair#*=}"
+              mise x -- talhelper gencommand apply --node "$node" --extra-flags="--insecure --nodes $ip" | bash
+            done
+          elif [ -n "{{.BOOTSTRAP_IPS}}" ]; then
+            echo "BOOTSTRAP_IPS expects node=ip pairs; use BOOTSTRAP_NODE_IPS like 'io=192.168.2.105 ...'"
+            exit 1
+          else
+            mise x -- talhelper gencommand apply | bash
+          fi
+      - |
+          if [ -n "{{.BOOTSTRAP_NODE_IPS}}" ]; then
+            first_pair=$(set -- {{.BOOTSTRAP_NODE_IPS}}; echo "$1")
+            first_ip="${first_pair#*=}"
+            output=$(mise x -- talhelper gencommand bootstrap --extra-flags="--nodes $first_ip --endpoints $first_ip" | bash 2>&1 || true)
+            if echo "$output" | grep -q "AlreadyExists"; then
+              echo "bootstrap already complete; continuing"
+            elif [ -n "$output" ]; then
+              echo "$output"
+              exit 1
+            fi
+            until mise x -- talhelper gencommand kubeconfig --extra-flags="{{.ROOT_DIR}} --force --nodes $first_ip --endpoints $first_ip" | bash; do sleep 10; done
+          else
+            output=$(mise x -- talhelper gencommand bootstrap | bash 2>&1 || true)
+            if echo "$output" | grep -q "AlreadyExists"; then
+              echo "bootstrap already complete; continuing"
+            elif [ -n "$output" ]; then
+              echo "$output"
+              exit 1
+            fi
+            until mise x -- talhelper gencommand kubeconfig --extra-flags="{{.ROOT_DIR}} --force" | bash; do sleep 10; done
+          fi
+    preconditions:
+      - test -f {{.ROOT_DIR}}/.sops.yaml
+      - test -f {{.SOPS_AGE_KEY_FILE}}
+      - test -f {{.TALOS_DIR}}/talconfig.yaml
+      - sh: mise which talhelper
+      - sh: mise which talosctl
+      - sh: mise which sops
+
+  apps:
+    desc: Bootstrap apps into the Talos cluster
+    cmd: bash {{.SCRIPTS_DIR}}/bootstrap-apps.sh
+    preconditions:
+      - msg: Unsupported bash version, run `brew install bash` to upgrade
+        sh: '{{if eq OS "darwin"}}test -f /opt/homebrew/bin/bash || test -f /usr/local/bin/bash{{end}}'
+      - test -f {{.KUBECONFIG}}
+      - test -f {{.ROOT_DIR}}/.sops.yaml
+      - test -f {{.SCRIPTS_DIR}}/bootstrap-apps.sh
+      - test -f {{.SOPS_AGE_KEY_FILE}}
