@@ -10,4 +10,4 @@ resources:
   - ./namespace.yaml
   - ./echo/ks.yaml
   - ./kite/ks.yaml
-  - ./website/ks.yaml
+  # - ./website/ks.yaml
