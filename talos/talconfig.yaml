@@ -43,7 +43,7 @@ nodes:
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/ee21ef4a5ef808a9b7484cc0dda0f25075021691c8c09a276591eedb638ea1f9
-    controlPlane: true
+    controlPlane: false
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "dc:a6:32:c1:35:e9"
@@ -54,15 +54,13 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.2.1"
         mtu: 1500
-        vip:
-          ip: "192.168.2.2"
   - hostname: "europa"
     ipAddress: "192.168.2.12"
     installDisk: "/dev/sda"
     machineSpec:
       secureboot: false
     talosImageURL: factory.talos.dev/installer/ee21ef4a5ef808a9b7484cc0dda0f25075021691c8c09a276591eedb638ea1f9
-    controlPlane: true
+    controlPlane: false
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "dc:a6:32:c1:36:0d"
@@ -73,8 +71,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.2.1"
         mtu: 1500
-        vip:
-          ip: "192.168.2.2"
   - hostname: "callisto"
     ipAddress: "192.168.2.13"
     installDisk: "/dev/sda"
@@ -92,8 +88,6 @@ nodes:
           - network: "0.0.0.0/0"
             gateway: "192.168.2.1"
         mtu: 1500
-        vip:
-          ip: "192.168.2.2"
 
 # Global patches
 patches:
