@@ -52,3 +52,11 @@ spec:
           - backendRefs:
               - identifier: app
                 port: *port
+    persistence:
+      kubeconfig:
+        type: secret
+        name: kite-kubeconfig
+        globalMounts:
+          - path: /config/kubeconfig
+            subPath: kubeconfig
+            readOnly: true
