@@ -22,6 +22,9 @@ spec:
               ANONYMOUS_USER_ENABLED: true
               HOST: https://kite.${SECRET_DOMAIN}
               KUBECONFIG: /config/kubeconfig
+              ENABLE_ANALYTICS: true
+              DB_TYPE: postgres
+              DB_DSN: postgresql://${SECRET_PG_USERNAME}:${SECRET_PG_PASSWORD}@192.168.3.40:5432/kite_pi
             resources:
               requests:
                 cpu: 10m
