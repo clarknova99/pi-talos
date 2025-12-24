@@ -15,7 +15,7 @@ spec:
         containers:
           app:
             image:
-              repository: docker.io/bitnami/nginx
+              repository: ghcr.io/linuxserver/nginx
               tag: 1.28.0
             env:
             resources:
