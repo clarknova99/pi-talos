@@ -2,15 +2,15 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: echo
+  name: kite
 spec:
   chartRef:
     kind: OCIRepository
-    name: echo
+    name: kite
   interval: 1h
   values:
     controllers:
-      echo:
+      kite:
         strategy: RollingUpdate
         containers:
           app:

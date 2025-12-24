@@ -32,3 +32,8 @@ tasks:
     preconditions:
       - test -f {{.KUBECONFIG}}
       - which flux
+
+  commit:
+    desc: Stage, commit & push
+    cmds:
+      - git pull && git add -A && git commit -m {{ .CLI_ARGS }} && git push && task reconcile
