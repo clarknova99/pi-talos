@@ -6,10 +6,11 @@
     "files.trimTrailingWhitespace": true,
     "sops.defaults.ageKeyFile": "age.key",
     "vs-kubernetes": {
-        "vs-kubernetes.kubeconfig": "./kubeconfig",
+        "vs-kubernetes.kubeconfig": "/Users/mfeldbly/code/pi-talos/kubeconfig",
         "vs-kubernetes.knownKubeconfigs": [
-          "./kubeconfig"
-      ]
+            "./kubeconfig",
+            "/Users/mfeldbly/code/pi-talos/kubeconfig"
+        ]
     },
     "yaml.schemaStore.enable": true,
     "yaml.schemas": {

@@ -12,3 +12,4 @@ resources:
   - ./homepage/ks.yaml
   - ./kite/ks.yaml
   - ./website/ks.yaml
+  - ./ytd/ks.yaml
