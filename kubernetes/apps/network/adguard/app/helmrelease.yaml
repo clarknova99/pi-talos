@@ -70,314 +70,322 @@ spec:
         globalMounts:
           - path: /opt/adguardhome/work
             subPath: work
-      config:
+      conf:
         enabled: true
-        type: configMap
-        name: adguard
+        type: nfs
+        server: 192.168.1.3
+        path: /volume1/network-storage/cluster/adguard/conf
         globalMounts:
           - path: /opt/adguardhome/conf
-    configMaps:
-      settings:
-        data:
-          AdGuardHome.yaml: |
-            http:
-              pprof:
-                port: 6060
-                enabled: false
-              address: 0.0.0.0:80
-              session_ttl: 720h
-            users:
-              - name: ${SECRET_ADGUARD_USERNAME}
-                password: $2y$10$lZ38LKamHoXrlfcbk3Atp.IYOd0uER3CVK9Lz0VLo57w0XzbANciy
-            auth_attempts: 5
-            block_auth_min: 15
-            http_proxy: ""
-            language: ""
-            theme: auto
-            dns:
-              bind_hosts:
-                - 0.0.0.0
-              port: 53
-              anonymize_client_ip: false
-              ratelimit: 20
-              ratelimit_subnet_len_ipv4: 24
-              ratelimit_subnet_len_ipv6: 56
-              ratelimit_whitelist: []
-              refuse_any: true
-              upstream_dns:
-                - '[/home.arpa/]192.168.1.1'
-                - '[/${SECRET_DOMAIN_TWO}/]192.168.3.22'
-                - '[/${SECRET_DOMAIN_THREE}/]192.168.3.22'
-                - '[/${SECRET_DOMAIN}/]192.168.3.22'
-                - https://dns.cloudflare.com/dns-query
-                - https://dns10.quad9.net/dns-query
-              upstream_dns_file: ""
-              bootstrap_dns:
-                - 9.9.9.10
-                - 149.112.112.10
-                - 2620:fe::10
-                - 2620:fe::fe:10
-              fallback_dns: []
-              upstream_mode: fastest_addr
-              fastest_timeout: 1s
-              allowed_clients: []
-              disallowed_clients: []
-              blocked_hosts:
-                - version.bind
-                - id.server
-                - hostname.bind
-              trusted_proxies:
-                - 10.0.0.0/8
-                - 127.0.0.0/8
-                - ::1/128
-              cache_enabled: true
-              cache_size: 4194304
-              cache_ttl_min: 0
-              cache_ttl_max: 0
-              cache_optimistic: false
-              cache_optimistic_answer_ttl: 30s
-              cache_optimistic_max_age: 12h
-              bogus_nxdomain: []
-              aaaa_disabled: false
-              enable_dnssec: false
-              edns_client_subnet:
-                custom_ip: ""
-                enabled: false
-                use_custom: false
-              max_goroutines: 300
-              handle_ddr: true
-              ipset: []
-              ipset_file: ""
-              bootstrap_prefer_ipv6: false
-              upstream_timeout: 10s
-              private_networks: []
-              use_private_ptr_resolvers: true
-              local_ptr_upstreams:
-                - udp://192.168.3.1
-                - udp://192.168.2.1
-                - udp://192.168.1.1
-              use_dns64: false
-              dns64_prefixes: []
-              serve_http3: false
-              use_http3_upstreams: false
-              serve_plain_dns: true
-              hostsfile_enabled: true
-              pending_requests:
-                enabled: true
-            tls:
-              enabled: true
-              server_name: ""
-              force_https: false
-              port_https: 443
-              port_dns_over_tls: 853
-              port_dns_over_quic: 853
-              port_dnscrypt: 0
-              dnscrypt_config_file: ""
-              allow_unencrypted_doh: false
-              certificate_chain: ""
-              private_key: ""
-              strict_sni_check: false
-            querylog:
-              dir_path: ""
-              ignored: []
-              interval: 720h
-              size_memory: 1000
-              enabled: true
-              file_enabled: true
-            statistics:
-              dir_path: ""
-              ignored: []
-              interval: 720h
-              enabled: true
-            filters:
-              - enabled: true
-                url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
-                name: AdGuard DNS filter
-                id: 1
-              - enabled: true
-                url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt
-                name: AdAway Default Blocklist
-                id: 2
-            whitelist_filters: []
-            user_rules:
-              - '||mask.icloud.com^$important,dnsrewrite=NXDOMAIN;;'
-              - '||mask-h2.icloud.com^$important,dnsrewrite=NXDOMAIN;;'
-              - '||mask-api.icloud.com^$important,dnsrewrite=NXDOMAIN;;'
-              - '||metrics.icloud.com^$important,dnsrewrite=NXDOMAIN;;'
-              - '||mask-t.apple-dns.net^$important,dnsrewrite=NXDOMAIN;;'
-              - '||mask.apple-dns.net^$important,dnsrewrite=NXDOMAIN;;'
-              - '||mask-api.fe.apple-dns.net^$important,dnsrewrite=NXDOMAIN;;'
-              - '||_dns-sd._udp^'
-              - '||lb._dns-sd._udp^'
-              - /^lb\._dns-sd\._udp\..*\.in-addr\.arpa\.$/
-              - /^.*\.in-addr\.arpa\.$/dnstype=PTR
-              - '@@||clarity.ms^$important'
-              - '@@||sdk.split.io^$important'
-              - '@@||cdn.split.io^$important'
-              - '@@||googlesyndication.com^$important'
-              - '@@||google-analytics.com^$important'
-              - '@@||googleads.g.doubleclick.net^$important'
-              - '@@||analytics.google.com^$important'
-              - '@@||adtrafficquality.google^$important'
-              - '@@||rudderlabs.com^$important'
-              - ""
-            dhcp:
-              enabled: false
-              interface_name: ""
-              local_domain_name: lan
-              dhcpv4:
-                gateway_ip: ""
-                subnet_mask: ""
-                range_start: ""
-                range_end: ""
-                lease_duration: 86400
-                icmp_timeout_msec: 1000
-                options: []
-              dhcpv6:
-                range_start: ""
-                lease_duration: 86400
-                ra_slaac_only: false
-                ra_allow_slaac: false
-            filtering:
-              blocking_ipv4: 192.168.3.25
-              blocking_ipv6: '::'
-              blocked_services:
-                schedule:
-                  time_zone: America/New_York
-                ids:
-                  - icloud_private_relay
-                  - tiktok
-              protection_disabled_until: null
-              safe_search:
-                enabled: true
-                bing: true
-                duckduckgo: true
-                ecosia: true
-                google: true
-                pixabay: true
-                yandex: true
-                youtube: true
-              blocking_mode: default
-              parental_block_host: family-block.dns.adguard.com
-              safebrowsing_block_host: standard-block.dns.adguard.com
-              rewrites: []
-              safe_fs_patterns:
-                - /opt/adguardhome/work/userfilters/*
-              safebrowsing_cache_size: 1048576
-              safesearch_cache_size: 1048576
-              parental_cache_size: 1048576
-              cache_time: 30
-              filters_update_interval: 24
-              blocked_response_ttl: 10
-              filtering_enabled: false
-              rewrites_enabled: true
-              parental_enabled: true
-              safebrowsing_enabled: true
-              protection_enabled: true
-            clients:
-              runtime_sources:
-                whois: true
-                arp: true
-                rdns: true
-                dhcp: true
-                hosts: true
-              persistent:
-                - safe_search:
-                    enabled: false
-                    bing: false
-                    duckduckgo: false
-                    ecosia: false
-                    google: false
-                    pixabay: false
-                    yandex: false
-                    youtube: false
-                  blocked_services:
-                    schedule:
-                      time_zone: America/New_York
-                    ids: []
-                  name: dcil-ghh3cwg7m7-m.local
-                  ids:
-                    - 192.168.1.120
-                  tags:
-                    - user_admin
-                  upstreams: []
-                  uid: 01977e68-2ff4-7578-ab88-7cbed1b096b9
-                  upstreams_cache_size: 0
-                  upstreams_cache_enabled: false
-                  use_global_settings: false
-                  filtering_enabled: true
-                  parental_enabled: false
-                  safebrowsing_enabled: true
-                  use_global_blocked_services: true
-                  ignore_querylog: false
-                  ignore_statistics: false
-                - safe_search:
-                    enabled: false
-                    bing: true
-                    duckduckgo: true
-                    ecosia: true
-                    google: true
-                    pixabay: true
-                    yandex: true
-                    youtube: false
-                  blocked_services:
-                    schedule:
-                      time_zone: America/New_York
-                    ids: []
-                  name: galaxy-s10
-                  ids:
-                    - 192.168.1.128
-                  tags: []
-                  upstreams: []
-                  uid: 01979d10-1bd9-76b6-befa-5c42ddb5f58c
-                  upstreams_cache_size: 0
-                  upstreams_cache_enabled: false
-                  use_global_settings: false
-                  filtering_enabled: true
-                  parental_enabled: false
-                  safebrowsing_enabled: true
-                  use_global_blocked_services: true
-                  ignore_querylog: false
-                  ignore_statistics: false
-                - safe_search:
-                    enabled: false
-                    bing: false
-                    duckduckgo: false
-                    ecosia: false
-                    google: false
-                    pixabay: false
-                    yandex: false
-                    youtube: false
-                  blocked_services:
-                    schedule:
-                      time_zone: America/New_York
-                    ids: []
-                  name: 'i15 '
-                  ids:
-                    - 192.168.1.71
-                  tags: []
-                  upstreams: []
-                  uid: 0197c62a-501a-7f2f-8c5a-dc0ba3db532f
-                  upstreams_cache_size: 0
-                  upstreams_cache_enabled: false
-                  use_global_settings: false
-                  filtering_enabled: true
-                  parental_enabled: false
-                  safebrowsing_enabled: true
-                  use_global_blocked_services: true
-                  ignore_querylog: false
-                  ignore_statistics: false
-            log:
-              enabled: true
-              file: ""
-              max_backups: 0
-              max_size: 100
-              max_age: 3
-              compress: false
-              local_time: true
-              verbose: false
-            os:
-              group: ""
-              user: ""
-              rlimit_nofile: 0
-            schema_version: 32
+            subPath: conf
+    #   config:
+    #     enabled: true
+    #     type: configMap
+    #     name: adguard
+    #     globalMounts:
+    #       - path: /opt/adguardhome/conf
+    # configMaps:
+    #   settings:
+    #     data:
+    #       AdGuardHome.yaml: |
+    #         http:
+    #           pprof:
+    #             port: 6060
+    #             enabled: false
+    #           address: 0.0.0.0:80
+    #           session_ttl: 720h
+    #         users:
+    #           - name: ${SECRET_ADGUARD_USERNAME}
+    #             password: $2y$10$lZ38LKamHoXrlfcbk3Atp.IYOd0uER3CVK9Lz0VLo57w0XzbANciy
+    #         auth_attempts: 5
+    #         block_auth_min: 15
+    #         http_proxy: ""
+    #         language: ""
+    #         theme: auto
+    #         dns:
+    #           bind_hosts:
+    #             - 0.0.0.0
+    #           port: 53
+    #           anonymize_client_ip: false
+    #           ratelimit: 20
+    #           ratelimit_subnet_len_ipv4: 24
+    #           ratelimit_subnet_len_ipv6: 56
+    #           ratelimit_whitelist: []
+    #           refuse_any: true
+    #           upstream_dns:
+    #             - '[/home.arpa/]192.168.1.1'
+    #             - '[/${SECRET_DOMAIN_TWO}/]192.168.3.22'
+    #             - '[/${SECRET_DOMAIN_THREE}/]192.168.3.22'
+    #             - '[/${SECRET_DOMAIN}/]192.168.3.22'
+    #             - https://dns.cloudflare.com/dns-query
+    #             - https://dns10.quad9.net/dns-query
+    #           upstream_dns_file: ""
+    #           bootstrap_dns:
+    #             - 9.9.9.10
+    #             - 149.112.112.10
+    #             - 2620:fe::10
+    #             - 2620:fe::fe:10
+    #           fallback_dns: []
+    #           upstream_mode: fastest_addr
+    #           fastest_timeout: 1s
+    #           allowed_clients: []
+    #           disallowed_clients: []
+    #           blocked_hosts:
+    #             - version.bind
+    #             - id.server
+    #             - hostname.bind
+    #           trusted_proxies:
+    #             - 10.0.0.0/8
+    #             - 127.0.0.0/8
+    #             - ::1/128
+    #           cache_enabled: true
+    #           cache_size: 4194304
+    #           cache_ttl_min: 0
+    #           cache_ttl_max: 0
+    #           cache_optimistic: false
+    #           cache_optimistic_answer_ttl: 30s
+    #           cache_optimistic_max_age: 12h
+    #           bogus_nxdomain: []
+    #           aaaa_disabled: false
+    #           enable_dnssec: false
+    #           edns_client_subnet:
+    #             custom_ip: ""
+    #             enabled: false
+    #             use_custom: false
+    #           max_goroutines: 300
+    #           handle_ddr: true
+    #           ipset: []
+    #           ipset_file: ""
+    #           bootstrap_prefer_ipv6: false
+    #           upstream_timeout: 10s
+    #           private_networks: []
+    #           use_private_ptr_resolvers: true
+    #           local_ptr_upstreams:
+    #             - udp://192.168.3.1
+    #             - udp://192.168.2.1
+    #             - udp://192.168.1.1
+    #           use_dns64: false
+    #           dns64_prefixes: []
+    #           serve_http3: false
+    #           use_http3_upstreams: false
+    #           serve_plain_dns: true
+    #           hostsfile_enabled: true
+    #           pending_requests:
+    #             enabled: true
+    #         tls:
+    #           enabled: true
+    #           server_name: ""
+    #           force_https: false
+    #           port_https: 443
+    #           port_dns_over_tls: 853
+    #           port_dns_over_quic: 853
+    #           port_dnscrypt: 0
+    #           dnscrypt_config_file: ""
+    #           allow_unencrypted_doh: false
+    #           certificate_chain: ""
+    #           private_key: ""
+    #           strict_sni_check: false
+    #         querylog:
+    #           dir_path: ""
+    #           ignored: []
+    #           interval: 720h
+    #           size_memory: 1000
+    #           enabled: true
+    #           file_enabled: true
+    #         statistics:
+    #           dir_path: ""
+    #           ignored: []
+    #           interval: 720h
+    #           enabled: true
+    #         filters:
+    #           - enabled: true
+    #             url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
+    #             name: AdGuard DNS filter
+    #             id: 1
+    #           - enabled: true
+    #             url: https://adguardteam.github.io/HostlistsRegistry/assets/filter_2.txt
+    #             name: AdAway Default Blocklist
+    #             id: 2
+    #         whitelist_filters: []
+    #         user_rules:
+    #           - '||mask.icloud.com^$important,dnsrewrite=NXDOMAIN;;'
+    #           - '||mask-h2.icloud.com^$important,dnsrewrite=NXDOMAIN;;'
+    #           - '||mask-api.icloud.com^$important,dnsrewrite=NXDOMAIN;;'
+    #           - '||metrics.icloud.com^$important,dnsrewrite=NXDOMAIN;;'
+    #           - '||mask-t.apple-dns.net^$important,dnsrewrite=NXDOMAIN;;'
+    #           - '||mask.apple-dns.net^$important,dnsrewrite=NXDOMAIN;;'
+    #           - '||mask-api.fe.apple-dns.net^$important,dnsrewrite=NXDOMAIN;;'
+    #           - '||_dns-sd._udp^'
+    #           - '||lb._dns-sd._udp^'
+    #           - /^lb\._dns-sd\._udp\..*\.in-addr\.arpa\.$/
+    #           - /^.*\.in-addr\.arpa\.$/dnstype=PTR
+    #           - '@@||clarity.ms^$important'
+    #           - '@@||sdk.split.io^$important'
+    #           - '@@||cdn.split.io^$important'
+    #           - '@@||googlesyndication.com^$important'
+    #           - '@@||google-analytics.com^$important'
+    #           - '@@||googleads.g.doubleclick.net^$important'
+    #           - '@@||analytics.google.com^$important'
+    #           - '@@||adtrafficquality.google^$important'
+    #           - '@@||rudderlabs.com^$important'
+    #           - ""
+    #         dhcp:
+    #           enabled: false
+    #           interface_name: ""
+    #           local_domain_name: lan
+    #           dhcpv4:
+    #             gateway_ip: ""
+    #             subnet_mask: ""
+    #             range_start: ""
+    #             range_end: ""
+    #             lease_duration: 86400
+    #             icmp_timeout_msec: 1000
+    #             options: []
+    #           dhcpv6:
+    #             range_start: ""
+    #             lease_duration: 86400
+    #             ra_slaac_only: false
+    #             ra_allow_slaac: false
+    #         filtering:
+    #           blocking_ipv4: 192.168.3.25
+    #           blocking_ipv6: '::'
+    #           blocked_services:
+    #             schedule:
+    #               time_zone: America/New_York
+    #             ids:
+    #               - icloud_private_relay
+    #               - tiktok
+    #           protection_disabled_until: null
+    #           safe_search:
+    #             enabled: true
+    #             bing: true
+    #             duckduckgo: true
+    #             ecosia: true
+    #             google: true
+    #             pixabay: true
+    #             yandex: true
+    #             youtube: true
+    #           blocking_mode: default
+    #           parental_block_host: family-block.dns.adguard.com
+    #           safebrowsing_block_host: standard-block.dns.adguard.com
+    #           rewrites: []
+    #           safe_fs_patterns:
+    #             - /opt/adguardhome/work/userfilters/*
+    #           safebrowsing_cache_size: 1048576
+    #           safesearch_cache_size: 1048576
+    #           parental_cache_size: 1048576
+    #           cache_time: 30
+    #           filters_update_interval: 24
+    #           blocked_response_ttl: 10
+    #           filtering_enabled: false
+    #           rewrites_enabled: true
+    #           parental_enabled: true
+    #           safebrowsing_enabled: true
+    #           protection_enabled: true
+    #         clients:
+    #           runtime_sources:
+    #             whois: true
+    #             arp: true
+    #             rdns: true
+    #             dhcp: true
+    #             hosts: true
+    #           persistent:
+    #             - safe_search:
+    #                 enabled: false
+    #                 bing: false
+    #                 duckduckgo: false
+    #                 ecosia: false
+    #                 google: false
+    #                 pixabay: false
+    #                 yandex: false
+    #                 youtube: false
+    #               blocked_services:
+    #                 schedule:
+    #                   time_zone: America/New_York
+    #                 ids: []
+    #               name: dcil-ghh3cwg7m7-m.local
+    #               ids:
+    #                 - 192.168.1.120
+    #               tags:
+    #                 - user_admin
+    #               upstreams: []
+    #               uid: 01977e68-2ff4-7578-ab88-7cbed1b096b9
+    #               upstreams_cache_size: 0
+    #               upstreams_cache_enabled: false
+    #               use_global_settings: false
+    #               filtering_enabled: true
+    #               parental_enabled: false
+    #               safebrowsing_enabled: true
+    #               use_global_blocked_services: true
+    #               ignore_querylog: false
+    #               ignore_statistics: false
+    #             - safe_search:
+    #                 enabled: false
+    #                 bing: true
+    #                 duckduckgo: true
+    #                 ecosia: true
+    #                 google: true
+    #                 pixabay: true
+    #                 yandex: true
+    #                 youtube: false
+    #               blocked_services:
+    #                 schedule:
+    #                   time_zone: America/New_York
+    #                 ids: []
+    #               name: galaxy-s10
+    #               ids:
+    #                 - 192.168.1.128
+    #               tags: []
+    #               upstreams: []
+    #               uid: 01979d10-1bd9-76b6-befa-5c42ddb5f58c
+    #               upstreams_cache_size: 0
+    #               upstreams_cache_enabled: false
+    #               use_global_settings: false
+    #               filtering_enabled: true
+    #               parental_enabled: false
+    #               safebrowsing_enabled: true
+    #               use_global_blocked_services: true
+    #               ignore_querylog: false
+    #               ignore_statistics: false
+    #             - safe_search:
+    #                 enabled: false
+    #                 bing: false
+    #                 duckduckgo: false
+    #                 ecosia: false
+    #                 google: false
+    #                 pixabay: false
+    #                 yandex: false
+    #                 youtube: false
+    #               blocked_services:
+    #                 schedule:
+    #                   time_zone: America/New_York
+    #                 ids: []
+    #               name: 'i15 '
+    #               ids:
+    #                 - 192.168.1.71
+    #               tags: []
+    #               upstreams: []
+    #               uid: 0197c62a-501a-7f2f-8c5a-dc0ba3db532f
+    #               upstreams_cache_size: 0
+    #               upstreams_cache_enabled: false
+    #               use_global_settings: false
+    #               filtering_enabled: true
+    #               parental_enabled: false
+    #               safebrowsing_enabled: true
+    #               use_global_blocked_services: true
+    #               ignore_querylog: false
+    #               ignore_statistics: false
+    #         log:
+    #           enabled: true
+    #           file: ""
+    #           max_backups: 0
+    #           max_size: 100
+    #           max_age: 3
+    #           compress: false
+    #           local_time: true
+    #           verbose: false
+    #         os:
+    #           group: ""
+    #           user: ""
+    #           rlimit_nofile: 0
+    #         schema_version: 32
