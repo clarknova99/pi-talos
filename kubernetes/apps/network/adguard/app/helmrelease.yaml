@@ -71,7 +71,9 @@ spec:
           - path: /opt/adguardhome/work
             subPath: work
       config:
-        existingClaim: adguard-config
+        enabled: true
+        type: configMap
+        name: adguard
         globalMounts:
           - path: /opt/adguardhome/conf
     configMaps:
