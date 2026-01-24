@@ -16,7 +16,7 @@ spec:
           app:
             image:
               repository: ghcr.io/zxh326/kite
-              tag: v0.7.7
+              tag: v0.7.8
             env:
               DEBUG: true
               ANONYMOUS_USER_ENABLED: true
