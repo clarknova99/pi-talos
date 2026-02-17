@@ -6,6 +6,7 @@ metadata:
   name: flux-operator
   annotations:
     gethomepage.dev/enabled: "true"
+    gethomepage.dev/icon: flux-cd
 spec:
   hostnames:
     - "flux-operator.${SECRET_DOMAIN}"
