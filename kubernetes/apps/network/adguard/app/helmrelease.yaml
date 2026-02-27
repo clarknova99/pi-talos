@@ -69,7 +69,6 @@ spec:
         path: /volume1/network-storage/cluster/adguard/work
         globalMounts:
           - path: /opt/adguardhome/work
-            subPath: work
       conf:
         enabled: true
         type: nfs
@@ -77,7 +76,6 @@ spec:
         path: /volume1/network-storage/cluster/adguard/conf
         globalMounts:
           - path: /opt/adguardhome/conf
-            subPath: conf
     #   config:
     #     enabled: true
     #     type: configMap
