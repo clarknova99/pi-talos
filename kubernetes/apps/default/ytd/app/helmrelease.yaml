@@ -35,7 +35,8 @@ spec:
         annotations:
           gethomepage.dev/enabled: "true"
           gethomepage.dev/icon: youtubedl.svg
-        hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
+        hostnames:
+          - leonia.${SECRET_DOMAIN}
         parentRefs:
           - name: envoy-internal
             namespace: network
