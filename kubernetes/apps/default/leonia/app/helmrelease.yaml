@@ -1,0 +1,63 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: leonia
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: leonia
+  interval: 1h
+  values:
+    controllers:
+      leonia:
+        strategy: RollingUpdate
+        containers:
+          app:
+            image:
+              repository: ghcr.io/clarknova99/leonia/webapp
+              tag: main-2026-06-01-14-02-00-6adc602
+            env:
+              DEBUG: true
+              HOST: https://leonia.${SECRET_DOMAIN}
+            resources:
+              requests:
+                cpu: 10m
+    service:
+      app:
+        ports:
+          http:
+            port: &port 8000
+    serviceMonitor:
+      app:
+        endpoints:
+          - port: http
+    route:
+      app:
+        annotations:
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/icon: kubernetes-dashboard.svg
+        hostnames: ["{{ .Release.Name }}.${SECRET_DOMAIN}"]
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+        rules:
+          - backendRefs:
+              - identifier: app
+                port: *port
+    persistence:
+      network:
+        enabled: true
+        type: nfs
+        server: 192.168.1.3
+        path: /volume1/network-storage/cluster/leonia/network/leonia_borough.geojson
+        globalMounts:
+          - path: /app/data/network/leonia_borough.geojson
+      pre-cache:
+        enabled: true
+        type: nfs
+        server: 192.168.1.3
+        path: /volume1/network-storage/cluster/leonia/processed/sumo/runs_precache
+        globalMounts:
+          - path: /app/data/processed/sumo/runs_precache
