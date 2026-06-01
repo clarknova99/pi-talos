@@ -16,7 +16,7 @@ spec:
           app:
             image:
               repository: ghcr.io/clarknova99/leonia/webapp
-              tag: main-2026-06-01-14-02-00-6adc602
+              tag: main-2026-06-01-14-24-39-75cfa98
             env:
               DEBUG: true
               HOST: https://leonia.${SECRET_DOMAIN}
