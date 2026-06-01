@@ -11,6 +11,6 @@ resources:
   - ./echo/ks.yaml
   - ./homepage/ks.yaml
   - ./kite/ks.yaml
-  # - ./leonia/ks.yaml
+  - ./leonia/ks.yaml
   - ./website/ks.yaml
   # - ./ytd/ks.yaml
