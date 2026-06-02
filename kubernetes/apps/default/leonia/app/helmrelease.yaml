@@ -16,7 +16,7 @@ spec:
           app:
             image:
               repository: ghcr.io/clarknova99/leonia/webapp
-              tag: main-2026-06-02-21-23-25-1adac75
+              tag: main-2026-06-02-21-54-59-869ba67
             resources:
               requests:
                 cpu: 10m
