@@ -37,7 +37,7 @@ spec:
         hostnames:
           - leonia.${SECRET_DOMAIN}
         parentRefs:
-          - name: envoy-internal
+          - name: envoy-externa
             namespace: network
             sectionName: https
         rules:
