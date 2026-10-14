@@ -15,8 +15,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/zxh326/kite
-              tag: v0.12.2
+              repository: ghcr.io/kite-org/kite
+              tag: v0.16.0
             env:
               DEBUG: true
               ANONYMOUS_USER_ENABLED: true
