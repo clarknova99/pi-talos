@@ -12,7 +12,7 @@ spec:
     controllers:
       homepage:
         strategy: RollingUpdate
-        defaultPodOptions:
+        pod:
           automountServiceAccountToken: true
         containers:
           app:
